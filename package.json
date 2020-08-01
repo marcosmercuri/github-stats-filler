@@ -4,11 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/marcosmercuri/github-stats-filler.git"
+  },
+  "engines": {
+    "node": "12.18.1",
+    "npm": ">=6.12.0"
   },
   "keywords": [],
   "author": "",
@@ -16,5 +21,12 @@
   "bugs": {
     "url": "https://github.com/marcosmercuri/github-stats-filler/issues"
   },
-  "homepage": "https://github.com/marcosmercuri/github-stats-filler#readme"
+  "homepage": "https://github.com/marcosmercuri/github-stats-filler#readme",
+  "dependencies": {
+    "date-fns": "^2.14.0",
+    "isomorphic-git": "^1.7.0"
+  },
+  "devDependencies": {
+    "jest": "^26.1.0"
+  }
 }
