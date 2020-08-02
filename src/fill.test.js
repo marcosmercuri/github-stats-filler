@@ -10,7 +10,7 @@ const mockMathRandom = mockNumber => {
   global.Math = mockMath
 }
 
-const config = {
+const baseConfig = {
   auth: {
     username: 'username',
     password: 'pass'
@@ -32,20 +32,20 @@ describe('fill', () => {
   })
 
   test('should call clone', async () => {
-    const result = await fill(config)
+    const result = await fill(baseConfig)
 
     expect(result).toBeTruthy()
 
     expect(git.clone).toHaveBeenCalledTimes(1)
 
     const cloneArgs = git.clone.mock.calls[0][0]
-    expect(cloneArgs.dir).toBe(config.dir)
-    expect(cloneArgs.url).toBe(config.repoUrl)
+    expect(cloneArgs.dir).toBe(baseConfig.dir)
+    expect(cloneArgs.url).toBe(baseConfig.repoUrl)
     expect(cloneArgs.singleBranch).toBe(true)
 
     const onAuthResponse = cloneArgs.onAuth()
-    expect(onAuthResponse.username).toBe(config.auth.username)
-    expect(onAuthResponse.password).toBe(config.auth.password)
+    expect(onAuthResponse.username).toBe(baseConfig.auth.username)
+    expect(onAuthResponse.password).toBe(baseConfig.auth.password)
   })
 
   describe('should call commit', () => {
@@ -54,7 +54,7 @@ describe('fill', () => {
     test('twice', async () => {
       mockMathRandom(2/maxNumberOfCommits)
 
-      const result = await fill(config)
+      const result = await fill(baseConfig)
 
       expect(result).toBeTruthy()
 
@@ -64,21 +64,27 @@ describe('fill', () => {
     test('once with', async () => {
       mockMathRandom(1/maxNumberOfCommits)
 
-      const result = await fill(config)
+      const result = await fill(baseConfig)
 
       expect(result).toBeTruthy()
 
       expect(git.commit).toHaveBeenCalledTimes(1)
       const commitArgs = git.commit.mock.calls[0][0]
-      expect(commitArgs.dir).toBe(config.dir)
-      expect(commitArgs.author.name).toBe(config.author.name)
-      expect(commitArgs.author.email).toBe(config.author.email)
+      expect(commitArgs.dir).toBe(baseConfig.dir)
+      expect(commitArgs.author.name).toBe(baseConfig.author.name)
+      expect(commitArgs.author.email).toBe(baseConfig.author.email)
       expect(commitArgs.message).toBe('A lot of work')
     })
 
-    test('with specific commit date', async () => {
-      const mockRandomForYesterday = 1/7
-      mockMathRandom(mockRandomForYesterday)
+    test('with specific commit date based on config date', async () => {
+      const today = new Date(2019, 5, 5)
+
+      const config = {
+        ...baseConfig,
+        endDate: today
+      }
+      const mockRandomForPreviousDay = 1/7
+      mockMathRandom(mockRandomForPreviousDay)
 
       const result = await fill(config)
 
@@ -87,26 +93,25 @@ describe('fill', () => {
       const commitArgs = git.commit.mock.calls[0][0]
       const passedDate = fromUnixTime(commitArgs.author.timestamp)
 
-      const today = new Date()
-      const yesterday = dateFns.subDays(today, 1)
+      const previousDay = dateFns.subDays(today, 1)
 
-      expect(isSameDay(passedDate, yesterday)).toBeTruthy()
+      expect(isSameDay(passedDate, previousDay)).toBeTruthy()
     })
   })
 
   test('should call push', async () => {
-    const result = await fill(config)
+    const result = await fill(baseConfig)
 
     expect(result).toBeTruthy()
 
     expect(git.push).toHaveBeenCalledTimes(1)
 
     const pushArgs = git.push.mock.calls[0][0]
-    expect(pushArgs.dir).toBe(config.dir)
+    expect(pushArgs.dir).toBe(baseConfig.dir)
 
     const onAuthResponse = pushArgs.onAuth()
-    expect(onAuthResponse.username).toBe(config.auth.username)
-    expect(onAuthResponse.password).toBe(config.auth.password)
+    expect(onAuthResponse.username).toBe(baseConfig.auth.username)
+    expect(onAuthResponse.password).toBe(baseConfig.auth.password)
   })
 })
 

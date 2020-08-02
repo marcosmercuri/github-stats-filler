@@ -3,10 +3,12 @@ const http = require('isomorphic-git/http/node')
 const dateFns = require('date-fns')
 const fs = require('fs')
 
-const getCommitDateInSeconds = () => {
-  const today = new Date()
-  const daysToSubtract = Math.floor(Math.random() * 7)
-  const commitDate = dateFns.subDays(today, daysToSubtract)
+const randomInteger = maxNumber => Math.floor(Math.random() * maxNumber)
+
+const getCommitDateInSeconds = date => {
+  const daysInAWeek = 7
+  const daysToSubtract = randomInteger(daysInAWeek)
+  const commitDate = dateFns.subDays(date, daysToSubtract)
   return Math.floor(commitDate / 1000)
 }
 
@@ -15,8 +17,8 @@ const fill = async config => {
 
   await git.clone({fs, http, dir: config.dir, url: config.repoUrl, singleBranch: true, onAuth})
 
-  const numberOfCommits = Math.floor(Math.random() * config.maxNumberOfCommits)
-  const commitDateInSeconds = getCommitDateInSeconds()
+  const numberOfCommits = randomInteger(config.maxNumberOfCommits)
+  const commitDateInSeconds = getCommitDateInSeconds(config.endDate)
 
   const commitsPromises = []
   for (let i = 0; i < numberOfCommits; i++) {
