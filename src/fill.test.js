@@ -77,11 +77,11 @@ describe('fill', () => {
     })
 
     test('with specific commit date based on config date', async () => {
-      const today = new Date(2019, 5, 5)
+      const endDate = new Date(2019, 5, 5)
 
       const config = {
         ...baseConfig,
-        endDate: today
+        endDate
       }
       const mockRandomForPreviousDay = 1/7
       mockMathRandom(mockRandomForPreviousDay)
@@ -93,7 +93,7 @@ describe('fill', () => {
       const commitArgs = git.commit.mock.calls[0][0]
       const passedDate = fromUnixTime(commitArgs.author.timestamp)
 
-      const previousDay = dateFns.subDays(today, 1)
+      const previousDay = dateFns.subDays(endDate, 1)
 
       expect(isSameDay(passedDate, previousDay)).toBeTruthy()
     })
