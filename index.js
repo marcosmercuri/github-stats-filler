@@ -1,4 +1,4 @@
-const fill = require('./src/fill')
+const fillPastWeek = require('./src/fill-past-week')
 
 exports.handler = async (event, context) => {
   const today = new Date()
@@ -16,5 +16,5 @@ exports.handler = async (event, context) => {
     maxNumberOfCommits: 80,
     endDate: today
   }
-  return await fill(config)
+  return await fillPastWeek(config)
 }

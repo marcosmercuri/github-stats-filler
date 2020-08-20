@@ -12,7 +12,7 @@ const getCommitDateInSeconds = date => {
   return Math.floor(commitDate / 1000)
 }
 
-const fill = async config => {
+const fillPastWeek = async config => {
   const onAuth = () => config.auth
 
   await git.clone({fs, http, dir: config.dir, url: config.repoUrl, singleBranch: true, onAuth})
@@ -39,4 +39,4 @@ const fill = async config => {
   return true
 }
 
-module.exports = fill
+module.exports = fillPastWeek

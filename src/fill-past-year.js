@@ -1,4 +1,4 @@
-const fill = require('./fill')
+const fillPastWeek = require('./fill-past-week')
 const dateFns = require('date-fns')
 const isBefore = require('date-fns/isBefore')
 const secrets = require('./secrets.json')
@@ -23,7 +23,7 @@ const fillPastYear = async () => {
   let endDate = dateFns.subYears(today, 1)
 
   while (isBefore(endDate, today)) {
-    await fill({
+    await fillPastWeek({
       ...config,
       endDate
     })

@@ -1,4 +1,4 @@
-const fill = require('./fill')
+const fillPastWeek = require('./fill-past-week')
 const git = require('isomorphic-git')
 const fromUnixTime = require('date-fns/fromUnixTime')
 const dateFns = require('date-fns')
@@ -24,7 +24,7 @@ const baseConfig = {
   maxNumberOfCommits: 80
 }
 
-describe('fill', () => {
+describe('fillPastWeek', () => {
   beforeEach(() => {
     git.clone.mockClear()
     git.commit.mockClear()
@@ -32,7 +32,7 @@ describe('fill', () => {
   })
 
   test('should call clone', async () => {
-    const result = await fill(baseConfig)
+    const result = await fillPastWeek(baseConfig)
 
     expect(result).toBeTruthy()
 
@@ -54,7 +54,7 @@ describe('fill', () => {
     test('twice', async () => {
       mockMathRandom(2/maxNumberOfCommits)
 
-      const result = await fill(baseConfig)
+      const result = await fillPastWeek(baseConfig)
 
       expect(result).toBeTruthy()
 
@@ -64,7 +64,7 @@ describe('fill', () => {
     test('once with', async () => {
       mockMathRandom(1/maxNumberOfCommits)
 
-      const result = await fill(baseConfig)
+      const result = await fillPastWeek(baseConfig)
 
       expect(result).toBeTruthy()
 
@@ -86,7 +86,7 @@ describe('fill', () => {
       const mockRandomForPreviousDay = 1/7
       mockMathRandom(mockRandomForPreviousDay)
 
-      const result = await fill(config)
+      const result = await fillPastWeek(config)
 
       expect(result).toBeTruthy()
 
@@ -100,7 +100,7 @@ describe('fill', () => {
   })
 
   test('should call push', async () => {
-    const result = await fill(baseConfig)
+    const result = await fillPastWeek(baseConfig)
 
     expect(result).toBeTruthy()
 
