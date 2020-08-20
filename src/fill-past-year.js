@@ -1,18 +1,19 @@
 const fill = require('./fill')
 const dateFns = require('date-fns')
 const isBefore = require('date-fns/isBefore')
+const secrets = require('./secrets.json')
 
 const config = {
   auth: {
-    username: process.env.AUTH_USERNAME,
-    password: process.env.AUTH_PASSWORD
+    username: secrets.AUTH_USERNAME,
+    password: secrets.AUTH_PASSWORD
   },
-  repoUrl: process.env.REPO_URL,
+  repoUrl: secrets.REPO_URL,
   author: {
-    name: process.env.AUTHOR_NAME,
-    email: process.env.AUTHOR_EMAIL
+    name: secrets.AUTHOR_NAME,
+    email: secrets.AUTHOR_EMAIL
   },
-  dir: process.env.DIR,
+  dir: secrets.DIR,
   maxNumberOfCommits: 80,
   endDate: undefined
 }
