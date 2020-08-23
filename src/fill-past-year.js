@@ -22,14 +22,16 @@ const fillPastYear = async () => {
   const today = new Date()
   let endDate = dateFns.subYears(today, 1)
 
+  const promises = []
   while (isBefore(endDate, today)) {
-    await fillPastWeek({
+    promises.push(fillPastWeek({
       ...config,
       endDate
-    })
+    }))
     endDate = dateFns.addWeeks(endDate, 1)
   }
 
+  await Promise.all(promises)
 }
 
 module.exports = fillPastYear
