@@ -12,26 +12,35 @@ const getCommitDateInSeconds = date => {
   return Math.floor(commitDate / 1000)
 }
 
+const commit = (config, commitDateInSeconds) => () => {
+  const commitParams = {
+    fs,
+    dir: config.dir,
+    author: {
+      ...config.author,
+      timestamp: commitDateInSeconds
+    },
+    message: 'A lot of work'
+  }
+  return git.commit(commitParams)
+}
+
+const createCommits = (config, numberOfCommits) => {
+  const commitDateInSeconds = getCommitDateInSeconds(config.endDate)
+
+  return Array.apply(null, { length: numberOfCommits })
+    .map(commit(config, commitDateInSeconds))
+}
+
 const fillPastWeek = async config => {
   const onAuth = () => config.auth
 
   await git.clone({fs, http, dir: config.dir, url: config.repoUrl, singleBranch: true, onAuth})
 
   const numberOfCommits = randomInteger(config.maxNumberOfCommits)
-  const commitDateInSeconds = getCommitDateInSeconds(config.endDate)
 
-  const commitsPromises = []
-  for (let i = 0; i < numberOfCommits; i++) {
-    commitsPromises.push(git.commit({
-      fs,
-      dir: config.dir,
-      author: {
-        ...config.author,
-        timestamp: commitDateInSeconds
-      },
-      message: 'A lot of work'
-    }))
-  }
+  const commitsPromises = createCommits(config, numberOfCommits)
+
   await Promise.all(commitsPromises)
 
   await git.push({fs, http, dir: config.dir, onAuth})
