@@ -24,7 +24,7 @@
   "homepage": "https://github.com/marcosmercuri/github-stats-filler#readme",
   "dependencies": {
     "date-fns": "^2.14.0",
-    "isomorphic-git": "^1.7.0"
+    "isomorphic-git": "^1.8.2"
   },
   "devDependencies": {
     "jest": "^26.1.0"
